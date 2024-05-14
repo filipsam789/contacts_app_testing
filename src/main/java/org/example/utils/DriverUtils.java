@@ -22,6 +22,7 @@ public class DriverUtils {
         desiredCapabilities.setCapability("automationName", AUTOMATION_NAME);
         return desiredCapabilities;
     }
+
     public static void initDriver() {
 
         try {
@@ -41,3 +42,4 @@ public class DriverUtils {
         }
     }
 }
+
