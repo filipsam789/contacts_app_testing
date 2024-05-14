@@ -22,13 +22,12 @@ public class DriverUtils {
         desiredCapabilities.setCapability("automationName", AUTOMATION_NAME);
         return desiredCapabilities;
     }
-    public static AppiumDriver initDriver() {
+    public static void initDriver() {
         try {
             driver = new AndroidDriver(new URL("http://localhost:4723"), getDesiredCapabilities());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        return driver;
     }
 
     public static AppiumDriver getDriver() {
