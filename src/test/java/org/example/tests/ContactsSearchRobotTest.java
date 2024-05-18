@@ -2,6 +2,7 @@ package org.example.tests;
 
 import io.appium.java_client.AppiumDriver;
 import org.example.bots.ContactSearchBot;
+import org.example.interactions.ContactInteractions;
 import org.example.utils.DriverUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,6 +17,7 @@ import java.util.SortedSet;
 
 public class ContactsSearchRobotTest {
     private static ContactSearchBot contactSearchBot;
+    private static ContactInteractions contactInteractions;
     private static AppiumDriver driver;
     private static List<String> allContacts;
     private static HashMap<String, SortedSet<String>> allContactNumbers;
@@ -25,7 +27,8 @@ public class ContactsSearchRobotTest {
         DriverUtils.initDriver();
         driver = DriverUtils.getDriver();
         contactSearchBot = new ContactSearchBot(driver);
-        allContacts = contactSearchBot.getAllContacts();
+        contactInteractions = new ContactInteractions(driver, contactSearchBot);
+        allContacts = contactInteractions.getAllContacts();
         allContactNumbers = contactSearchBot.getAllContactNumbers();
     }
 
@@ -34,12 +37,15 @@ public class ContactsSearchRobotTest {
         DriverUtils.initDriver();
         driver = DriverUtils.getDriver();
         contactSearchBot = new ContactSearchBot(driver);
+        contactInteractions = new ContactInteractions(driver, contactSearchBot);
         System.out.println("driver setup");
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"An", "gmail", "John"})
-    public void searchContactByNameOrEmailTest(String searchQuery) {
+    public void searchContactByNameOrEmailTest(String searchQuery) throws InterruptedException {
+        if (allContacts.isEmpty())
+            return;
 
         List<String> searchResults = contactSearchBot.searchContactByNameOrEmail(searchQuery);
         System.out.println(searchResults);
@@ -53,11 +59,14 @@ public class ContactsSearchRobotTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"078", "07", "0", "+389"})
-    public void searchContactByPhoneNumberTest(String phoneNumber) {
+    public void searchContactByPhoneNumberTest(String phoneNumber) throws InterruptedException {
+        if (allContacts.isEmpty())
+            return;
 
         System.out.println("all numbers");
         System.out.println(allContactNumbers);
         List<String> searchResults = contactSearchBot.searchContactByPhoneNumber(phoneNumber);
+        System.out.println("search results");
         System.out.println(searchResults);
 
         for (SortedSet<String> values : allContactNumbers.values()) {

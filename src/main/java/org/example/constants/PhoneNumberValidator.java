@@ -11,9 +11,9 @@ public class PhoneNumberValidator {
         }
 
         // Check if the phone number starts with a valid prefix
-        // We'll consider a valid prefix to be either a '+' or a digit
+        // We'll consider a valid prefix to be either a '+', '(' or a digit
         char firstChar = phoneNumber.charAt(0);
-        if (!(firstChar == '+' || Character.isDigit(firstChar))) {
+        if (!(firstChar == '+' || firstChar=='(' || Character.isDigit(firstChar))) {
             return false;
         }
 

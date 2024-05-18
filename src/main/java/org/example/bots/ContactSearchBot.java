@@ -29,11 +29,14 @@ public class ContactSearchBot extends BaseBot {
         input.sendKeys(keys);
     }
 
-    public List<String> searchContactByNameOrEmail(String searchQuery) {
+    public List<String> searchContactByNameOrEmail(String searchQuery) throws InterruptedException {
         this.searchContactByQuery(searchQuery);
+
         List<String> searchResults = new ArrayList<>();
 
         List<WebElement> contactElements = driver.findElements(By.xpath("//android.widget.TextView[@content-desc]"));
+        Thread.sleep(1000);
+
         for (WebElement contactElement : contactElements) {
             String name = contactElement.getAttribute("content-desc");
             searchResults.add(name);
@@ -41,34 +44,22 @@ public class ContactSearchBot extends BaseBot {
         return searchResults;
     }
 
-    public List<String> searchContactByPhoneNumber(String phoneNumber) {
+    public List<String> searchContactByPhoneNumber(String phoneNumber) throws InterruptedException {
         this.searchContactByQuery(phoneNumber);
 
         List<String> searchResults = new ArrayList<>();
 
         List<WebElement> contactElements = driver.findElements(By.xpath("//android.widget.ListView[@resource-id=\"android:id/list\"]/android.view.ViewGroup"));
+        Thread.sleep(1000);
 
         for (WebElement contactElement : contactElements) {
             String contactNumber = contactElement.findElement(By.xpath("//android.widget.TextView[@content-desc][2]")).getText();
             searchResults.add(contactNumber.replaceAll("\\s+", ""));
         }
 
-        System.out.println(searchResults);
         return searchResults;
     }
 
-
-    // Find all contacts
-    public List<String> getAllContacts() {
-        Set<String> allContactsNoDuplicates = new HashSet<>();
-        List<WebElement> contactElements = driver.findElements(By.id("com.android.contacts:id/cliv_name_textview"));
-        for (WebElement contactElement : contactElements) {
-            String contactName = contactElement.getAttribute("content-desc");
-            allContactsNoDuplicates.add(contactName);
-        }
-
-        return new ArrayList<>(allContactsNoDuplicates);
-    }
 
     // Find all contact numbers
     public HashMap<String, SortedSet<String>> getAllContactNumbers() {
@@ -84,9 +75,7 @@ public class ContactSearchBot extends BaseBot {
                 if (allContactNumbers.containsKey(contactName)) {
                     allContactNumbers.get(contactName).add(contactNumber.replaceAll("\\s+", ""));
                 } else {
-                    SortedSet<String> values = new TreeSet<>();
-                    values.add(contactNumber.replaceAll("\\s+", ""));
-                    allContactNumbers.put(contactName, values);
+                    allContactNumbers.computeIfAbsent(contactName, v -> new TreeSet<>()).add(contactNumber.replaceAll("\\s+", ""));
                 }
             }
             driver.navigate().back();
