@@ -12,8 +12,12 @@ public class ContactInteractions {
         this.contactSearchBot = contactSearchBot;
     }
 
-    public void searchContactByName(String query) {
-        contactSearchBot.searchContactByName(query);
+    public void searchContactByNameOrEmail(String query) {
+        contactSearchBot.searchContactByNameOrEmail(query);
+    }
+
+    public void searchContactByPhoneNumber(String query) {
+        contactSearchBot.searchContactByPhoneNumber(query);
     }
 
 }
