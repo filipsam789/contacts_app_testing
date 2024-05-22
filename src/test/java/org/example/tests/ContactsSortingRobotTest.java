@@ -7,25 +7,13 @@ import org.example.utils.DriverUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.testng.Assert;
 
 import java.util.*;
 
+@ExtendWith(AppiumReporter.class)
 public class ContactsSortingRobotTest {
-    private AppiumDriver driver;
-    private ContactsSortingBot contactsSortingBot;
-    private ContactInteractions contactInteractions;
-    @BeforeEach
-    public void init(){
-        DriverUtils.initDriver();
-        driver = DriverUtils.getDriver();
-        contactsSortingBot = new ContactsSortingBot(driver);
-        contactInteractions = new ContactInteractions(driver, contactsSortingBot);
-    }
 
     //This method and class serve the purpose for finding out whether contacts are correctly sorted by their last name.
     //We first need to get the contacts with their last names, but there isn't a clear separation for the first and last names.
@@ -39,7 +27,9 @@ public class ContactsSortingRobotTest {
     //We need to force the threads to sleep in order not to potentially get the StaleElementReferenceException.
     //Appium inspector was used for finding the ids, classes or xpaths of the elements on screen.
     @Test
-    public void executeSortingTest() throws InterruptedException {
+    public void executeSortingTest(AppiumDriver driver) throws InterruptedException {
+        ContactsSortingBot contactsSortingBot = new ContactsSortingBot(driver);
+        ContactInteractions contactInteractions = new ContactInteractions(driver, contactsSortingBot);
         contactInteractions.setDisplayByLastName();
         List<String> sortedList1 = contactsSortingBot.getStringContactsWithScrolling();
         contactInteractions.setSortByLastName();
@@ -47,8 +37,4 @@ public class ContactsSortingRobotTest {
         Assert.assertEquals(sortedList1, sortedList2);
     }
 
-    @AfterEach
-    public void destroy(){
-        DriverUtils.stopDriver();
-    }
 }
