@@ -3,14 +3,11 @@ package org.example.tests;
 import io.appium.java_client.AppiumDriver;
 import org.example.bots.ContactsSortingBot;
 import org.example.interactions.ContactInteractions;
-import org.example.utils.DriverUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testng.Assert;
 
-import java.util.*;
+import java.util.List;
 
 @ExtendWith(AppiumReporter.class)
 public class ContactsSortingRobotTest {
@@ -29,7 +26,7 @@ public class ContactsSortingRobotTest {
     @Test
     public void executeSortingTest(AppiumDriver driver) throws InterruptedException {
         ContactsSortingBot contactsSortingBot = new ContactsSortingBot(driver);
-        ContactInteractions contactInteractions = new ContactInteractions(driver, contactsSortingBot);
+        ContactInteractions contactInteractions = new ContactInteractions(driver);
         contactInteractions.setDisplayByLastName();
         List<String> sortedList1 = contactsSortingBot.getStringContactsWithScrolling();
         contactInteractions.setSortByLastName();

@@ -1,20 +1,14 @@
 package org.example.interactions;
 
 import io.appium.java_client.AppiumDriver;
-import org.example.bots.BaseBot;
-import org.example.bots.ContactSearchBot;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import java.util.List;
-
 public class ContactInteractions {
     private final AppiumDriver driver;
-    private final BaseBot baseBot;
 
-    public ContactInteractions(AppiumDriver driver, BaseBot baseBot) {
+    public ContactInteractions(AppiumDriver driver) {
         this.driver = driver;
-        this.baseBot = baseBot;
     }
     public void setDisplayByLastName() throws InterruptedException {
         WebElement menu = driver.findElement(By.xpath("//android.widget.ImageButton[@content-desc=\"Open navigation drawer\"]"));
