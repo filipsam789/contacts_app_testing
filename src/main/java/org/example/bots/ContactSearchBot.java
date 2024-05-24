@@ -53,7 +53,12 @@ public class ContactSearchBot extends BaseBot {
         Thread.sleep(1000);
 
         for (WebElement contactElement : contactElements) {
-            String contactNumber = contactElement.findElement(By.xpath("//android.widget.TextView[@content-desc][2]")).getText();
+            String contactNumber = null;
+            try {
+                contactNumber = contactElement.findElement(By.xpath("//android.widget.TextView[@content-desc][2]")).getText();
+            } catch (Exception e) {
+                contactNumber = contactElement.findElement(By.xpath("//android.widget.TextView[@content-desc][1]")).getText();
+            }
             searchResults.add(contactNumber.replaceAll("\\s+", ""));
         }
         Thread.sleep(1000);

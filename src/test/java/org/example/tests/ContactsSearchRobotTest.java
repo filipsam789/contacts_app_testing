@@ -23,12 +23,13 @@ public class ContactsSearchRobotTest {
     private static HashMap<String, SortedSet<String>> allContactNumbers;
 
     @BeforeAll
-    public static void setup() {
+    public static void setup() throws InterruptedException {
         DriverUtils.initDriver();
         driver = DriverUtils.getDriver();
         contactSearchBot = new ContactSearchBot(driver);
         contactInteractions = new ContactInteractions(driver, contactSearchBot);
         allContacts = contactInteractions.getAllContacts();
+        allContactNumbers = contactSearchBot.getAllContactNumbers();
     }
 
     @BeforeEach
@@ -59,7 +60,6 @@ public class ContactsSearchRobotTest {
     @ParameterizedTest
     @ValueSource(strings = {"078", "07", "0", "+389"})
     public void searchContactByPhoneNumberTest(String phoneNumber) throws InterruptedException {
-        allContactNumbers = contactSearchBot.getAllContactNumbers();
         if (allContacts.isEmpty())
             return;
 

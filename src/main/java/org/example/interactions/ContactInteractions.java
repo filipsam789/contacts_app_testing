@@ -36,7 +36,7 @@ public class ContactInteractions {
         return new ArrayList<>(allContactsNoDuplicates);
     }
 
-     //Find all contacts
+    //Find all contacts
     public List<String> getAllContacts() {
         List<String> allContacts = new ArrayList<>();
 
