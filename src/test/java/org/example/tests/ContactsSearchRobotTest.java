@@ -29,7 +29,6 @@ public class ContactsSearchRobotTest {
         contactSearchBot = new ContactSearchBot(driver);
         contactInteractions = new ContactInteractions(driver, contactSearchBot);
         allContacts = contactInteractions.getAllContacts();
-        allContactNumbers = contactSearchBot.getAllContactNumbers();
     }
 
     @BeforeEach
@@ -42,7 +41,7 @@ public class ContactsSearchRobotTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"An", "gmail", "John"})
+    @ValueSource(strings = {"An", "gmail", "Test"})
     public void searchContactByNameOrEmailTest(String searchQuery) throws InterruptedException {
         if (allContacts.isEmpty())
             return;
@@ -60,6 +59,7 @@ public class ContactsSearchRobotTest {
     @ParameterizedTest
     @ValueSource(strings = {"078", "07", "0", "+389"})
     public void searchContactByPhoneNumberTest(String phoneNumber) throws InterruptedException {
+        allContactNumbers = contactSearchBot.getAllContactNumbers();
         if (allContacts.isEmpty())
             return;
 

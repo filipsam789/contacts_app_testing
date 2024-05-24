@@ -19,9 +19,9 @@ public class ContactInteractions {
     }
 
 
-    // Find all contacts
-    public List<String> getAllContacts() {
-        Set<String> allContactsNoDuplicates = new HashSet<>();
+    // Find all contacts no duplicates
+    public List<String> getAllContactsNoDuplicates() {
+        Set<String> allContactsNoDuplicates = new TreeSet<>();
 
         List<WebElement> listOfContacts = driver.findElements(By.id("android:id/list"));
         if (listOfContacts.isEmpty()) {
@@ -34,6 +34,22 @@ public class ContactInteractions {
         }
 
         return new ArrayList<>(allContactsNoDuplicates);
+    }
+
+     //Find all contacts
+    public List<String> getAllContacts() {
+        List<String> allContacts = new ArrayList<>();
+
+        List<WebElement> listOfContacts = driver.findElements(By.id("android:id/list"));
+        if (listOfContacts.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<WebElement> contactElements = driver.findElements(By.id("com.android.contacts:id/cliv_name_textview"));
+        for (WebElement contactElement : contactElements) {
+            String contactName = contactElement.getAttribute("content-desc");
+            allContacts.add(contactName);
+        }
+        return new ArrayList<>(allContacts);
     }
 
 

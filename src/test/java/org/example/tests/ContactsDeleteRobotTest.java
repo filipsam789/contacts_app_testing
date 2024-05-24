@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.testng.Assert;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -45,9 +46,12 @@ public class ContactsDeleteRobotTest {
             return;
         }
 
+        allContacts.forEach(System.out::println);
+
         Random random = new Random();
         int allContactsSize = allContacts.size();
         int randomIndex = random.nextInt(allContactsSize);
+
         String contactName = allContacts.get(randomIndex);
         System.out.println(randomIndex + " " + contactName);
         String contactNameDeleted = contactDeleteBot.deleteContact(randomIndex + 1);

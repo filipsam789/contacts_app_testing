@@ -12,6 +12,7 @@ public class ContactDeleteBot extends BaseBot {
     }
 
     public String deleteContact(int index) throws InterruptedException {
+        System.out.println("index " + index);
         WebElement contact = driver.findElement(By.xpath("//android.widget.ListView[@resource-id=\"android:id/list\"]/android.view.ViewGroup[" + index + "]"));
         contact.click();
         Thread.sleep(1000);

@@ -56,16 +56,17 @@ public class ContactSearchBot extends BaseBot {
             String contactNumber = contactElement.findElement(By.xpath("//android.widget.TextView[@content-desc][2]")).getText();
             searchResults.add(contactNumber.replaceAll("\\s+", ""));
         }
-
+        Thread.sleep(1000);
         return searchResults;
     }
 
 
     // Find all contact numbers
-    public HashMap<String, SortedSet<String>> getAllContactNumbers() {
+    public HashMap<String, SortedSet<String>> getAllContactNumbers() throws InterruptedException {
         List<WebElement> contactElements = driver.findElements(By.xpath("//android.widget.ListView[@resource-id=\"android:id/list\"]/android.view.ViewGroup"));
         for (WebElement contactElement : contactElements) {
             contactElement.click();
+            Thread.sleep(1000);
             List<WebElement> numberElements = driver.findElements(By.id("com.android.contacts:id/header"));
             for (WebElement number : numberElements) {
                 String contactNumber = number.getAttribute("text");
