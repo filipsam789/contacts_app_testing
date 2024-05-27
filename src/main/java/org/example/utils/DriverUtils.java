@@ -22,10 +22,11 @@ public class DriverUtils {
         desiredCapabilities.setCapability("automationName", AUTOMATION_NAME);
         return desiredCapabilities;
     }
+
     public static void initDriver() {
 
         try {
-            driver = new AndroidDriver(new URL("http://localhost:4723"), getDesiredCapabilities());
+            driver = new AppiumDriver(new URL("http://localhost:4723"), getDesiredCapabilities());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
