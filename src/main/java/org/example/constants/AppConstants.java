@@ -6,4 +6,6 @@ public class AppConstants {
     public static final String APP_PACKAGE = "com.android.contacts";
     public static final String APP_ACTIVITY = "com.android.contacts.activities.PeopleActivity";
     public static final String AUTOMATION_NAME = "UiAutomator2";
+
+    public static int ReportFileCounter = 0;
 }

@@ -7,6 +7,7 @@ import org.example.utils.DriverUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.testng.Assert;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.SortedSet;
 
+@ExtendWith(AppiumReporter.class)
 public class ContactsSearchRobotTest {
     private static ContactSearchBot contactSearchBot;
     private static ContactInteractions contactInteractions;
@@ -27,7 +29,7 @@ public class ContactsSearchRobotTest {
         DriverUtils.initDriver();
         driver = DriverUtils.getDriver();
         contactSearchBot = new ContactSearchBot(driver);
-        contactInteractions = new ContactInteractions(driver, contactSearchBot);
+        contactInteractions = new ContactInteractions(driver);
         allContacts = contactInteractions.getAllContacts();
         allContactNumbers = contactSearchBot.getAllContactNumbers();
     }
@@ -37,7 +39,7 @@ public class ContactsSearchRobotTest {
         DriverUtils.initDriver();
         driver = DriverUtils.getDriver();
         contactSearchBot = new ContactSearchBot(driver);
-        contactInteractions = new ContactInteractions(driver, contactSearchBot);
+        contactInteractions = new ContactInteractions(driver);
         System.out.println("driver setup");
     }
 

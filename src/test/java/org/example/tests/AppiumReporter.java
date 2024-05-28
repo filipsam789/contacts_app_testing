@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
+import org.example.constants.AppConstants;
 import org.example.utils.DriverUtils;
 import org.junit.jupiter.api.extension.*;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
@@ -20,7 +21,6 @@ public class AppiumReporter implements ParameterResolver, AfterAllCallback, Test
 
     public static final Namespace NAMESPACE = Namespace.create(AppiumReporter.class);
     public static final String HTML_REPORT_DIR = System.getProperty("user.dir");
-    public static int ReportFileCounter = 0;
     AppiumDriver driver;
 
     public static void setSkippedTestInfo(String testName, String testStatus, String error) {
@@ -128,7 +128,7 @@ public class AppiumReporter implements ParameterResolver, AfterAllCallback, Test
     }
 
     public void createReportFile(String data, String fileName) throws IOException {
-        FileWriter fileWriter = new FileWriter(HTML_REPORT_DIR + "/" + fileName + " " + ++ReportFileCounter + ".html");
+        FileWriter fileWriter = new FileWriter(HTML_REPORT_DIR + "/" + fileName + " " + ++AppConstants.ReportFileCounter + ".html");
         fileWriter.write(data);
         fileWriter.close();
     }

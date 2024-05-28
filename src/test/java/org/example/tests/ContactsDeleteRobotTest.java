@@ -8,6 +8,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.testng.Assert;
 
 
@@ -15,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+@ExtendWith(AppiumReporter.class)
 public class ContactsDeleteRobotTest {
     private static ContactDeleteBot contactDeleteBot;
     private static ContactInteractions contactInteractions;
@@ -26,7 +28,7 @@ public class ContactsDeleteRobotTest {
         DriverUtils.initDriver();
         driver = DriverUtils.getDriver();
         contactDeleteBot = new ContactDeleteBot(driver);
-        contactInteractions = new ContactInteractions(driver, contactDeleteBot);
+        contactInteractions = new ContactInteractions(driver);
         allContacts = contactInteractions.getAllContacts();
     }
 
@@ -35,7 +37,7 @@ public class ContactsDeleteRobotTest {
         DriverUtils.initDriver();
         driver = DriverUtils.getDriver();
         contactDeleteBot = new ContactDeleteBot(driver);
-        contactInteractions = new ContactInteractions(driver, contactDeleteBot);
+        contactInteractions = new ContactInteractions(driver);
         System.out.println("driver setup");
     }
 
