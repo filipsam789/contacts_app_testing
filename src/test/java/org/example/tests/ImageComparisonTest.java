@@ -14,9 +14,9 @@ import org.openqa.selenium.OutputType;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -24,12 +24,24 @@ import static org.hamcrest.Matchers.*;
 public class ImageComparisonTest {
     AppiumDriver driver;
     ContactInteractions contactInteractions;
+
+    public static byte[] getImageBytes(String imagePath) {
+        try {
+            Path path = Path.of(imagePath);
+            return Files.readAllBytes(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @BeforeEach
-    public void init(){
+    public void init() {
         DriverUtils.initDriver();
         driver = DriverUtils.getDriver();
         contactInteractions = new ContactInteractions(driver);
     }
+
     private void saveImage(byte[] imageBytes, String fileName) {
         File file = new File(fileName);
         try (FileOutputStream fos = new FileOutputStream(file)) {
@@ -38,15 +50,15 @@ public class ImageComparisonTest {
             throw new RuntimeException(e);
         }
     }
+
     @Test
-    public void compareImages() throws InterruptedException {
+    public void compareImages() throws InterruptedException, IOException {
         Thread.sleep(500);
-        byte[] originalImg = Base64.encodeBase64(driver.getScreenshotAs(OutputType.BYTES));
-        saveImage(originalImg, "originalImage.png");
-        contactInteractions.setDisplayByLastName();
-        Thread.sleep(500);
+        byte[] originalImg = Base64.encodeBase64(getImageBytes("originalImage.png"));
+
         byte[] screenshot = Base64.encodeBase64(driver.getScreenshotAs(OutputType.BYTES));
         saveImage(screenshot, "screenshot.png");
+
 //        FeaturesMatchingResult result = driver
 //                .matchImagesFeatures(screenshot, originalImg, new FeaturesMatchingOptions()
 //                        .withDetectorName(FeatureDetector.ORB)
@@ -71,13 +83,10 @@ public class ImageComparisonTest {
         System.out.println(result.getScore());
         assertThat(result.getScore(), is(greaterThan(0.97)));
     }
+
     @Test
     public void compareImagesWithOpenCV() throws Exception {
         // Take a screenshot
-        Thread.sleep(500);
-        byte[] originalImg = Base64.encodeBase64(driver.getScreenshotAs(OutputType.BYTES));
-        saveImage(originalImg, "originalImage.png");
-        contactInteractions.setDisplayByLastName();
         Thread.sleep(500);
         byte[] screenshot = Base64.encodeBase64(driver.getScreenshotAs(OutputType.BYTES));
         saveImage(screenshot, "screenshot.png");
@@ -109,14 +118,15 @@ public class ImageComparisonTest {
                     diff = diff + data;
                 }
             }
-            double avg = diff / (w1 * h1 * 3);
+            double avg = diff / ((long) w1 * h1 * 3);
             double percentage = (avg / 255) * 100;
             System.out.println("Difference: " + percentage);
-            assertThat((long)percentage, is(lessThan(1L)));
+            assertThat((long) percentage, is(lessThan(1L)));
         }
     }
+
     @AfterEach
-    public void destroy(){
+    public void destroy() {
         DriverUtils.stopDriver();
     }
 }

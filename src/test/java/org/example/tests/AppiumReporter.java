@@ -18,9 +18,48 @@ import java.util.concurrent.TimeUnit;
 
 public class AppiumReporter implements ParameterResolver, AfterAllCallback, TestWatcher {
 
-    AppiumDriver driver;
     public static final Namespace NAMESPACE = Namespace.create(AppiumReporter.class);
     public static final String HTML_REPORT_DIR = System.getProperty("user.dir");
+    public static int ReportFileCounter = 0;
+    AppiumDriver driver;
+
+    public static void setSkippedTestInfo(String testName, String testStatus, String error) {
+        try {
+            String url = "http://localhost:4723/setTestInfo";
+            String body = "{" +
+                    "\"testName\":\"" + testName + "\"," +
+                    "\"testStatus\":\"" + testStatus + "\"," +
+                    "\"error\":\"" + error + "\"" +
+                    "}";
+            System.out.println("url = " + url);
+            System.out.println("Body of setTestInfo = " + body);
+            HttpResponse<JsonNode> jsonNodeHttpResponse = Unirest.post(url)
+                    .header("Content-Type", "application/json")
+                    .body(body).asJson();
+        } catch (Exception e) {
+            System.out.println("Failed to set Test info");
+        }
+    }
+
+    public static void setTestInfo(String sessionId, String testName, String testStatus, String error) {
+        try {
+            String url = "http://localhost:4723/setTestInfo";
+            String body = "{" +
+                    "\"sessionId\":\"" + sessionId + "\"," +
+                    "\"testName\":\"" + testName + "\"," +
+                    "\"testStatus\":\"" + testStatus + "\"," +
+                    "\"error\":\"" + error + "\"" +
+                    "}";
+            System.out.println("url = " + url);
+            System.out.println("Body of setTestInfo = " + body);
+            HttpResponse<JsonNode> jsonNodeHttpResponse = Unirest.post(url)
+                    .header("Content-Type", "application/json")
+                    .body(body).asJson();
+        } catch (Exception e) {
+            System.out.println("Failed to set Test info");
+        }
+
+    }
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext)
@@ -37,17 +76,17 @@ public class AppiumReporter implements ParameterResolver, AfterAllCallback, Test
         return driver;
     }
 
-    public void quitDriver(AppiumDriver driver){
-        if(driver != null && driver.getSessionId() != null)
+    public void quitDriver(AppiumDriver driver) {
+        if (driver != null && driver.getSessionId() != null)
             driver.quit();
         driver = null;
     }
 
-    public String getSessionId(AppiumDriver driver){
+    public String getSessionId(AppiumDriver driver) {
         String sessionId;
         try {
             sessionId = driver.getSessionId().toString();
-        } catch (Exception e){
+        } catch (Exception e) {
             sessionId = UUID.randomUUID().toString();
         }
         return sessionId;
@@ -77,44 +116,6 @@ public class AppiumReporter implements ParameterResolver, AfterAllCallback, Test
         quitDriver(driver);
     }
 
-    public static void setSkippedTestInfo(String testName, String testStatus, String error) {
-        try {
-            String url = "http://localhost:4723/setTestInfo";
-            String body = "{" +
-                    "\"testName\":\""+testName+"\"," +
-                    "\"testStatus\":\""+testStatus+"\"," +
-                    "\"error\":\""+error+"\"" +
-                    "}";
-            System.out.println("url = " + url);
-            System.out.println("Body of setTestInfo = " + body);
-            HttpResponse<JsonNode> jsonNodeHttpResponse = Unirest.post(url)
-                    .header("Content-Type", "application/json")
-                    .body(body).asJson();
-        } catch (Exception e){
-            System.out.println("Failed to set Test info");
-        }
-    }
-
-    public static void setTestInfo(String sessionId, String testName, String testStatus, String error) {
-        try {
-            String url = "http://localhost:4723/setTestInfo";
-            String body = "{" +
-                    "\"sessionId\":\""+sessionId+"\"," +
-                    "\"testName\":\""+testName+"\"," +
-                    "\"testStatus\":\""+testStatus+"\"," +
-                    "\"error\":\""+error+"\"" +
-                    "}";
-            System.out.println("url = " + url);
-            System.out.println("Body of setTestInfo = " + body);
-            HttpResponse<JsonNode> jsonNodeHttpResponse = Unirest.post(url)
-                    .header("Content-Type", "application/json")
-                    .body(body).asJson();
-        } catch (Exception e){
-            System.out.println("Failed to set Test info");
-        }
-
-    }
-
     public String getReport() throws IOException, InterruptedException {
         String url = "http://localhost:4723/getReport";
         String s = Unirest.get(url).asString().getBody();
@@ -127,7 +128,7 @@ public class AppiumReporter implements ParameterResolver, AfterAllCallback, Test
     }
 
     public void createReportFile(String data, String fileName) throws IOException {
-        FileWriter fileWriter = new FileWriter(HTML_REPORT_DIR + "/" + fileName + ".html");
+        FileWriter fileWriter = new FileWriter(HTML_REPORT_DIR + "/" + fileName + " " + ++ReportFileCounter + ".html");
         fileWriter.write(data);
         fileWriter.close();
     }
