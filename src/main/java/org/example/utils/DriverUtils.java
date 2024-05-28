@@ -2,6 +2,7 @@ package org.example.utils;
 
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.MalformedURLException;
@@ -23,8 +24,9 @@ public class DriverUtils {
     }
 
     public static void initDriver() {
+
         try {
-            driver = new AppiumDriver(new URL("http://localhost:4723"), getDesiredCapabilities());
+            driver = new AndroidDriver(new URL("http://localhost:4723"), getDesiredCapabilities());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -40,4 +42,3 @@ public class DriverUtils {
         }
     }
 }
-
