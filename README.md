@@ -8,6 +8,7 @@
 - Gjorgji Koceski
 
 This project involves testing the Android 11 Contacts application using Java and the Appium framework for UI automation.
+We did this project with the mentorship of Netcetera.
 
 Our team started with session-based testing to identify any bugs or issues in the Contacts application. This initial phase 
 helped us ensure that the application was functioning correctly.
