@@ -130,7 +130,6 @@ public class ContactInteractions {
             if (counter == 1) scrolled = false;
             if (newSize.getHeight() == oldSize.getHeight()) counter++;
         }
-
         return contactNames.stream().toList();
     }
 
