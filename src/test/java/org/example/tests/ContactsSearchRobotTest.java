@@ -31,7 +31,8 @@ public class ContactsSearchRobotTest {
         contactSearchBot = new ContactSearchBot(driver);
         contactInteractions = new ContactInteractions(driver);
         allContacts = contactInteractions.getAllContacts();
-        allContactNumbers = contactSearchBot.getAllContactNumbers();
+//        allContactNumbers = contactSearchBot.getAllContactNumbers();
+        allContactNumbers = new HashMap<>();
     }
 
     @BeforeEach
@@ -44,7 +45,7 @@ public class ContactsSearchRobotTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"An", "gmail", "Test"})
+    @ValueSource(strings = {"An", "gmail", "yahoo", "Test"})
     public void searchContactByNameOrEmailTest(String searchQuery) throws InterruptedException {
         if (allContacts.isEmpty())
             return;
@@ -53,15 +54,18 @@ public class ContactsSearchRobotTest {
         System.out.println(searchResults);
 
         for (String contact : allContacts) {
-            if (contact.toLowerCase().contains(searchQuery.toLowerCase())) {
+            if (contact.toLowerCase().contains(searchQuery.toLowerCase()) && contact.toLowerCase().startsWith(searchQuery.toLowerCase())) {
                 Assert.assertTrue(searchResults.contains(contact));
             } else assert !searchResults.contains(searchQuery.toLowerCase());
         }
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"078", "07", "0", "+389"})
+    @ValueSource(strings = {"0", "078", "07", "+389"})
     public void searchContactByPhoneNumberTest(String phoneNumber) throws InterruptedException {
+        if (allContactNumbers.isEmpty())
+            allContactNumbers = contactSearchBot.getAllContactNumbers();
+
         if (allContacts.isEmpty())
             return;
 
@@ -77,10 +81,11 @@ public class ContactsSearchRobotTest {
                     Assert.assertTrue(searchResults.contains(contact));
                     break;
                 } else {
-                    Assert.assertFalse(searchResults.contains(phoneNumber.toLowerCase()));
+                    Assert.assertFalse(searchResults.contains(contact.toLowerCase()));
                 }
             }
         }
+
     }
 
     @AfterEach

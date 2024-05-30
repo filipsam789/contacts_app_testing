@@ -24,6 +24,7 @@ public class ContactDeleteBot extends BaseBot {
         Thread.sleep(1000);
         WebElement confirm = driver.findElement(By.xpath("//android.widget.Button[@resource-id=\"android:id/button1\"]"));
         confirm.click();
+        Thread.sleep(1000);
         WebElement deletedName = driver.findElement(By.xpath("//android.widget.Toast"));
         return deletedName.getAttribute("text");
     }
